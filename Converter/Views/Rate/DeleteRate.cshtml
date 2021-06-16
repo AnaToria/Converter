@@ -1,0 +1,65 @@
+﻿@model Converter.Rate
+
+@{
+    ViewBag.Title = "DeleteRate";
+}
+
+<h2>კურსის წაშლა</h2>
+
+<h3>დარწმუნებული ხართ, რომ გსურთ ოპერაციის განხორციელება?</h3>
+<div>
+    <hr />
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            <p>
+                <span class="control-label col-md-2"><b>@Html.DisplayName("ვალუტის კოდი")</b></span>
+            </p>
+            <p class="col-md-10">
+                <span class="control-label col-md-2"> @Html.DisplayFor(model => model.code)</span>
+            </p>
+        </div>
+
+        <div class="form-group">
+            <p>
+                <span class="control-label col-md-2"><b>@Html.DisplayName("ყიდვის კურსი")</b></span>
+            </p>
+            <p class="col-md-10">
+                <span class="control-label col-md-2">@String.Format(Model.bRate.ToString("0.0000"))</span>
+            </p>
+        </div>
+
+        <div class="form-group">
+            <p>
+                <span class="control-label col-md-2"><b>@Html.DisplayName("გაყიდვის კურსი")</b></span>
+            </p>
+            <p class="col-md-10">
+                <span class="control-label col-md-2">@String.Format(Model.sRate.ToString("0.0000"))</span>
+            </p>
+        </div>
+
+    </div>
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" value="Delete" class="btn btn-default">წაშლა</button> |
+                @Html.ActionLink("ჩამონათვალში დაბრუნება", "Index")
+            </div>
+
+        </div><br />
+    }
+
+
+    @if (ViewBag.Message != null)
+    {
+        <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+        </script>
+    }
+</div>

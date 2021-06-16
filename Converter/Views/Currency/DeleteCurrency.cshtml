@@ -1,0 +1,75 @@
+﻿@model Converter.Currency
+
+@{
+    ViewBag.Title = "DeleteCurrency";
+}
+
+<h2>ვალუტის წაშლა</h2>
+
+<h3>დარწმუნებული ხართ, რომ გსურთ ოპერაციის განხორციელება?</h3>
+<div>
+
+    <hr />
+    <div class="form-horizontal"> 
+
+        <div class="form-group">
+            <p>
+                <span class="control-label col-md-2"><b>@Html.DisplayName("ვალუტის კოდი")</b></span>
+            </p>
+            <p class="col-md-10">
+                <span class="control-label col-md-2"> @Html.DisplayFor(model => model.code)</span>
+            </p>
+        </div>
+
+        <div class="form-group">
+            <p>
+                <span class="control-label col-md-2"><b>@Html.DisplayName("ვალუტის დასახელება")</b></span>
+            </p>
+            <p class="col-md-10">
+                <span class="control-label col-md-2">@Html.DisplayFor(model => model.name)</span>
+            </p>
+        </div>
+
+        <div class="form-group">
+            <p>
+                <span class="control-label col-md-2"><b>@Html.DisplayName("ვალუტის დასახელება ლათინურად")</b></span>
+            </p>
+            <p class="col-md-10">
+                <span class="control-label col-md-2">@Html.DisplayFor(model => model.nameLatin)</span>
+            </p>
+        </div>
+
+        <div class="form-group">
+            <p>
+                <span class="control-label col-md-2"><b>@Html.DisplayName("თანმიმდევრობის ინდექსი")</b></span>
+            </p>
+            <p class="col-md-10">
+                <span class="control-label col-md-2">@Html.DisplayFor(model => model.orderNum)</span>
+            </p>
+        </div>
+
+
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" value="Delete" class="btn btn-default">წაშლა</button> |
+                @Html.ActionLink("ჩამონათვალში დაბრუნება", "Index")
+            </div>
+
+        </div><br />
+    }
+
+    @if (ViewBag.Message != null)
+    {
+        <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+        </script>
+    }
+</div>

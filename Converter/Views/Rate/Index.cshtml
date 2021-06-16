@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Converter.Rate>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>კურსის რეესტრი</h2>
+
+<p>
+    @Html.ActionLink("დაამატე კურსი", "CreateRate")
+</p>
+<table class="table">
+    <tr>
+        <th>ვალუტის კოდი</th>
+        <th>ყიდვის კურსი</th>
+        <th>გაყიდვის კურსი</th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.code)
+    </td>
+    <td>
+        @String.Format(item.bRate.ToString("0.0000"))
+    </td>
+    <td>
+        @String.Format(item.sRate.ToString("0.0000"))
+    </td>
+        <td>
+        @Html.ActionLink("ჩასწორება", "EditRate", new { id = item.id }) |
+        @Html.ActionLink("წაშლა", "DeleteRate", new { id = item.id })
+    </td>
+</tr>
+}
+
+</table>

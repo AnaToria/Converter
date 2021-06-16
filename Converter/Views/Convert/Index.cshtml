@@ -1,0 +1,86 @@
+﻿@model Converter.Models.ConvertViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>ვალუტის კონვერტაცია</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.TakenCur, "მისაღები ვალუტა", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("takenCur", new SelectList(ViewBag.data), new { htmlAttributes = new { @class = "form-control", required = "required", id = "takenCur" } })
+                @Html.ValidationMessageFor(model => model.TakenCur, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.GivenCur, "გასაცემი ვალუტა", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("givenCur", new SelectList(ViewBag.data), new { htmlAttributes = new { @class = "form-control", required = "required", id = "givenCur" } })
+                @Html.ValidationMessageFor(model => model.GivenCur, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TakenAmount, "მისაღები თანხის ოდენობა", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TakenAmount, new { htmlAttributes = new { @class = "form-control", required = "required", id = "takenAmount" } })
+                @Html.ValidationMessageFor(model => model.TakenAmount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="commentDiv" style="display:none">
+            @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control", id = "comment" } })
+                @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+            <button type="submit" value="Create" id="btnCalc" class="btn btn-default">კონვერტაცია</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("მისაღები ვალუტის რაოდენობა", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input id="givenAmount" name="givenAmount" type="text" value="@ViewBag.result" disabled />
+            </div>
+        </div>
+
+    </div>
+}
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+
+    <script type="text/javascript">
+
+        $("#takenAmount").on('input propertychange paste', function () {
+            if ($(this).val() >= 3000) {
+                $('#commentDiv').show();
+                $('#comment').attr('required', '');
+            } else {
+                $('#commentDiv').hide();
+                $('#comment').removeAttr('required', '');
+            }
+        });
+
+    </script>
+}

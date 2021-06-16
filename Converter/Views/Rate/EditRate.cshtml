@@ -1,0 +1,63 @@
+﻿@model Converter.Rate
+
+@{
+    ViewBag.Title = "EditRate";
+}
+
+<h2>კურსის ცვლილება</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.id)
+        @Html.HiddenFor(model => model.code)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.code, "ვალუტის კოდი", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.LabelFor(model => model.code, Model.code.ToString(), htmlAttributes: new { @class = "control-label col-md-2" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.bRate, "ყიდვის კურსი", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @{
+                    string temp1 = $"{decimal.Parse(Model.bRate.ToString())}";
+                    @Html.TextBox("bRate", temp1, null, new { htmlAttributes = new { @class = "form-control", required = "required", type = "number" } })
+                    @Html.ValidationMessageFor(model => model.bRate, "", new { @class = "text-danger" })
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.sRate, "გაყიდვის კურსი", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @{
+                    string temp2 = $"{decimal.Parse(Model.sRate.ToString())}";
+                    @Html.TextBox("sRate", temp2, null, new { htmlAttributes = new { @class = "form-control", required = "required", type = "number" } })
+                    @Html.ValidationMessageFor(model => model.sRate, "", new { @class = "text-danger" })
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" value="Save" class="btn btn-default">შენახვა</button>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("ჩამონათვალში დაბრუნება", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

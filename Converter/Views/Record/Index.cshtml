@@ -1,0 +1,118 @@
+﻿@model IEnumerable<Converter.Record>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>კონვერტაციების ცხრილი</h2>
+
+<div class="container">
+    <br /><br />
+    <label>ძიების მეთოდი</label>
+    <select id="searchBy" class="form-control">
+        <option value="all">ყველა</option>
+        <option value="suspicious">საეჭვო ტრანზაქციები</option>
+        <option value="date">თარიღის მიხედვით</option>
+    </select>
+    <br />
+    <div style="display:flex">
+        <input class="form-control" id="search1" type="date" style="display:none"/>
+        <input class="form-control" id="search2" type="date" style="display:none"/>     
+        <input class="btn btn-primary" type="submit" id="searchBtn" value="Search" />
+    </div>
+    <br />
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("მისაღები ვალუტა")
+            </th>
+            <th>
+                @Html.DisplayName("გასაცემი ვალუტა")
+            </th>
+            <th>
+                @Html.DisplayName("მისაღები თანხის ოდენობა")
+            </th>
+            <th>
+                @Html.DisplayName("გასაცემი თანხის ოდენობა")
+            </th>
+            <th>
+                @Html.DisplayName("კონვერტაციის განხორციელების თარიღი")
+            </th>
+            <th>
+                @Html.DisplayName("კომენტარი")
+            </th>
+        </tr>      
+    </thead>
+
+    <tbody id="dataSearching">
+
+    </tbody>
+    
+</table>
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+    });
+
+    $("#searchBy").on('input propertychange paste', function () {
+        if ($(this).val() == "date") {
+            $('#search1').show();
+            $('#search2').show();
+            $('#search1').attr('required', '');
+            $('#search2').attr('required', '');
+
+        } else {
+            $('#search1').hide();
+            $('#search2').hide();
+            $('#search1').removeAttr('required', '');
+            $('#search2').removeAttr('required', '');
+        }
+    });
+
+    $(document).ready(function () {
+        $("#searchBtn").click(function () {
+            var SetData = $("#dataSearching");
+            SetData.html("");
+            var myUrl = '';
+            var from = $("#search1").val();
+            var to = $("#search2").val();
+
+            if ($("#searchBy").val() == "all") {
+                myUrl = '/Record/GetAll';
+
+            }
+            else if ($("#searchBy").val() == "suspicious") {
+                myUrl = '/Record/GetSus';
+            }
+            else {
+                myUrl = "/Record/GetDate?from="+from+"&to="+to;
+            }
+
+
+            $.ajax({
+                type: 'POST',
+                url: myUrl,
+                contextType: 'application/json; charset=utf-8',
+                contentType: 'html',
+                success: function (result) {
+                    if (result.length == 0) {
+                        SetData.append('<tr><td>ჩანაწერი ვერ მოიძებნა</td></tr>');
+                    } else {
+                        $.each(result, function (key, value) {
+                            var date = new Date(parseInt((value.date).replace("/Date(", "").replace(")/", ""), 10)).toLocaleDateString();
+                            var data = "<tr><td>" + value.takenCur + "</td><td>" + value.givenCur + "</td><td>" + value.takenAmount + "</td><td>" + value.givenAmount + "</td><td>" + date + "</td><td>" + $.trim(value.comment) + "</td></tr>";
+                            SetData.append(data);
+                        })
+                    }
+                },
+                error: function (error) {
+                    alert("Request: " + JSON.stringify(error));
+                }
+            });
+        })
+    });
+
+</script>
